@@ -1,0 +1,30 @@
+{
+  "name": "@image-saas/example-nuxt",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck"
+  },
+  "dependencies": {
+    "@image-saas/api": "workspace:*",
+    "@trpc/client": "^11.19.0",
+    "nuxt": "^4.6.3",
+    "vue": "^3.5.0",
+    "vue-router": "^4.5.0",
+    "@image-saas/upload-button": "workspace:*",
+    "@image-saas/preact-vue-connect": "workspace:*",
+    "@image-saas/uploader": "workspace:*",
+    "@image-saas/dropzone": "workspace:*",
+    "preact": "^11.1.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0",
+    "vue-tsc": "^3.0.0",
+    "preact": "^11.1.1"
+  }
+}

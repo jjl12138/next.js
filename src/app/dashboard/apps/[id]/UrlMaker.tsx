@@ -1,0 +1,68 @@
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Slider } from "@/components/ui/Slider";
+import copy from "copy-to-clipboard";
+import { useState } from "react";
+import { toast } from "sonner";
+
+export function UrlMaker ({id}: {id: string}) {
+    const [width, setWidth] = useState(100);
+    const [rotate, setRotate] = useState(0);
+    const [url, setUrl] = useState(`/image/${id}?width=${width}&rotate=${rotate}`);
+    
+    return (
+        <div>
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <span>Rotate:</span>
+                    <Slider
+                        className="relative flex h-5 w-[200px] touch-none select-none items-center"
+                        value={[rotate]}
+                        onValueChange={(v)=>setRotate(v[0]??0)}
+                        max={180}
+                        min={-180}
+                        step={5}
+                    > 
+                    </Slider>
+                </div>
+                <div>
+                    <label htmlFor="widthInput" className="mr-2">
+                        {`width:`}
+                    </label>
+                    <input
+                        id="widthInput"
+                        type="number"
+                        value={width}
+                        max={2000}
+                        min={100}
+                        className="input input-bordered input-sm"
+                        onChange={(e)=>setWidth(Number(e.target.value))}
+                    />
+                </div>
+                <Button onClick={()=>setUrl(`/image/${id}?width=${width}&rotate=${rotate}`)}>Make</Button>
+            </div>
+            <div>
+                <div className="flex justify-center items-center">
+                    <img src={url} alt="generate url" className="max-w-full max-h-[60vh]"></img>
+                </div>
+            </div>
+            <div className="flex justify-between items-center gap-2">
+                <Input value={`${process.env.NEXT_PUBLIC_SITE_URL}${url}`} readOnly></Input>
+                {/* v4 的 copy() 返回 Promise<boolean>，必须 await 到结果再决定
+                    弹哪种 toast —— 同 FileItemAction 里修过的坑。 */}
+                <Button onClick={async ()=>{
+                    try {
+                        const ok = await copy(`${process.env.NEXT_PUBLIC_SITE_URL}${url}`);
+                        if (ok) {
+                            toast("Copied!");
+                        } else {
+                            toast.error("复制失败，请手动复制");
+                        }
+                    } catch {
+                        toast.error("复制失败，请手动复制");
+                    }
+                }}>Copy</Button>
+            </div>
+    </div>
+    );
+}

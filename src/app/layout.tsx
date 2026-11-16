@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { TRPCProvider } from "./TrpcProvider";
+// ⚠️ 这里挂的是 Toaster（渲染器），不是 SonnerDemo（那个只是个演示按钮）。
+// 它必须常驻在根节点：toast() 只负责投递消息，画面得靠它画出来。
+import { Toaster } from "@/components/ui/Sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,12 +22,28 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+
+
+
+  // ⚠️ <html> 上的 suppressHydrationWarning 必须加：next-themes 会在 hydration
+  //    之前就把它注入的内联脚本跑起来、往 <html> 写 data-theme / color-scheme，
+  //    而服务端渲染的 <html> 上没有这些属性 → React 判定
+  //    "some attributes of the server rendered HTML didn't match the client
+  //     properties"（dashboard 页一定会踩，因为 ThemeProvider 挂在那儿）。
+  //    这是 next-themes 官方要求的标准写法，只抑制 <html> 这一层的属性比对，
+  //    不影响子树；别把它当成"掩盖问题"。
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Toaster />
+        <TRPCProvider>
+        {children}
+        </TRPCProvider>
+      </body>
     </html>
   );
 }

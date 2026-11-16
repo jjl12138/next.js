@@ -1,0 +1,26 @@
+{
+  "name": "@image-saas/api",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && cp src/open-router-dts.d.ts dist/",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@trpc/client": "^11.19.0"
+  },
+  "peerDependencies": {
+    "@trpc/client": "^11.19.0"
+  }
+}
