@@ -19,6 +19,13 @@ import { AutoRedirect } from "./AutoRedirect";
  * TODO(支付)：生产应改用 webhook（checkout.session.completed）落库，
  * 本页只负责展示结果；webhook 能覆盖「用户付了款但没回到回调页」的情况。
  */
+
+// ⚠️ 本页读 searchParams（session_id）、查 Stripe、查数据库，必须每次请求
+//    实时执行。Cache Components（next.config 开启）默认要求这类数据访问
+//    包在 <Suspense> 里或显式声明为阻塞式路由——本页语义就是"阻塞+动态"，
+//    用 instant=false 声明（无预渲染，不影响功能）。
+export const instant = false;
+
 export default async function PaySuccessPage({
   searchParams,
 }: PageProps<"/pay/callback/success">) {

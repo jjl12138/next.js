@@ -45,6 +45,8 @@
     ".next-verify2/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "examples",
+    "packages"
   ]
 }
