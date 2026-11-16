@@ -9,16 +9,10 @@ import GithubProvider from "next-auth/providers/github"
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
 
 declare module "next-auth" {
-    type Plan = "free" | "paid";
     interface Session extends DefaultSession{
         user: {
             id: string;
-            plan: Plan;
         } & DefaultSession["user"];
-    }
-
-    interface User extends DefaultUser{
-        plan: Plan;
     }
  }
 
@@ -31,7 +25,6 @@ export const authOptions: AuthOptions = {
         async session({session, user}){
             if(session.user && user){
                 session.user.id = user.id;
-                session.user.plan = user.plan;
             }
             return session;
         }
@@ -39,8 +32,8 @@ export const authOptions: AuthOptions = {
     // Configure one or more authentication providers
     providers: [
         GithubProvider({
-            clientId: "Ov23lihu79KKj5XPEZzt",
-            clientSecret: "98760cf5c34eafe72c59a95f070065e7b02a2d4e",
+            clientId: process.env.GITHUB_CLIENT_ID!,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET!,
         }),
         // ...add more providers here   
     ]
